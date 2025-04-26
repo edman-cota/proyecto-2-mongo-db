@@ -1,0 +1,60 @@
+
+
+# Ignorar node_modules en backend y frontend
+backend/node_modules/
+frontend/node_modules/
+
+# Ignorar archivos de construcción (build) de ambos proyectos
+backend/build/
+frontend/build/
+
+# Archivos de configuración de dependencias
+/package-lock.json
+/yarn.lock
+
+# Variables de entorno
+/.env
+backend/.env
+frontend/.env
+
+# Archivos de log
+*.log
+
+# Directorios de compilación
+/dist
+/build
+
+# Archivos de cobertura de pruebas
+/coverage
+
+# Archivos de editor
+.vscode/
+/.idea/
+
+# Archivos de test temporal
+*.tgz
+
+# React / Frontend
+
+# Archivos generados por el build de React
+/build/
+
+# Archivos de configuración de dependencias
+/node_modules/
+
+# Archivos de log
+*.log
+
+# Archivos de editor
+.vscode/
+/.idea/
+
+# Dependencias de React
+/package-lock.json
+/yarn.lock
+
+# Archivos temporales de tests
+*.env.local
+
+# Otros
+*.DS_Store

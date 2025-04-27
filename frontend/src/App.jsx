@@ -1,10 +1,16 @@
 import './App.css';
-import RestaurantList from './RestaurantList';
+import Navigation from './Navigation';
+import Restaurants from './Restaurants';
+import { Routes, Route } from 'react-router';
 
 function App() {
   return (
-    <div>
-      <RestaurantList />
+    <div className='main'>
+      <Navigation />
+
+      <Routes>
+        <Route path='restaurants' element={<Restaurants />} />
+      </Routes>
     </div>
   );
 }

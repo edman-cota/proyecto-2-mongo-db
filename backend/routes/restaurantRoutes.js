@@ -12,11 +12,33 @@ router.get('/restaurants', async (req, res) => {
   }
 });
 
+router.get('/restaurants/search', async (req, res) => {
+  const { name } = req.query;
+
+  try {
+    const restaurantes = await Restaurant.find({ name: { $regex: name, $options: 'i' } }); // Búsqueda insensible a mayúsculas/minúsculas
+    res.json(restaurantes);
+  } catch (error) {
+    res.status(500).json({ message: 'Error searching for restaurants', error: error.message });
+  }
+});
+
 // Ruta para crear un restaurante
 router.post('/restaurants', async (req, res) => {
-  const { name, address, category, telephone } = req.body;
-  const restaurant = new Restaurant({ name, address, category, telephone });
+  const { name, address, category, phone } = req.body;
+
+  if (!name || !address || !category) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
   try {
+    const restaurant = new Restaurant({
+      name,
+      address,
+      category,
+      phone,
+    });
+
     const newRestaurant = await restaurant.save();
     res.status(201).json(newRestaurant);
   } catch (err) {

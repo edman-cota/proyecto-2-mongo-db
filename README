@@ -1,0 +1,4 @@
+INDICES
+
+1. Índices Simples (Single Field Indexes)
+   - Agregamos indices simples en el campo "name" de la colección "Restaurant" para optimizar las búsquedas por nombre.

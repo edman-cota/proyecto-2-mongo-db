@@ -46,4 +46,20 @@ router.post('/restaurants', async (req, res) => {
   }
 });
 
+router.delete('/restaurants/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedRestaurant = await Restaurant.findByIdAndDelete(id);
+
+    if (!deletedRestaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+
+    res.status(200).json({ message: 'Restaurant deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting restaurant', error: err.message });
+  }
+});
+
 module.exports = router;

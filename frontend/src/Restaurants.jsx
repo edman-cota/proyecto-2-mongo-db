@@ -6,6 +6,7 @@ import Table from './Table';
 
 const Restaurants = () => {
   const [restaurants, setRestaurants] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchData = () => {
     axios
@@ -18,16 +19,25 @@ const Restaurants = () => {
       });
   };
 
-  const [searchQuery, setSearchQuery] = useState(''); // Estado para el campo de búsqueda
-  // const [restaurants, setRestaurants] = useState([]); // Estado para los restaurantes encontrados
-
   const handleSearch = async () => {
     try {
-      // Realizar la solicitud GET al backend para buscar restaurantes por nombre
       const response = await axios.get(`http://localhost:5000/api/restaurants/search?name=${searchQuery}`);
-      setRestaurants(response.data); // Guardar los restaurantes encontrados en el estado
+      setRestaurants(response.data);
     } catch (error) {
       console.error('Error al buscar restaurantes:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/restaurants/${id}`);
+
+      setRestaurants(restaurants.filter((restaurant) => restaurant._id !== id));
+
+      alert('Restaurant deleted successfully');
+    } catch (error) {
+      console.error('Error deleting restaurant:', error);
+      alert('Failed to delete the restaurant');
     }
   };
 
@@ -45,38 +55,18 @@ const Restaurants = () => {
         <RestaurantModal fetchData={fetchData} />
       </div>
 
-      <div>
-        <h2>Search for Restaurants</h2>
-        <input
-          type='text'
-          placeholder='Enter restaurant name'
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} // Actualizar el estado cuando el usuario escribe
-        />
-        <button onClick={handleSearch}>Search</button>
-
-        {restaurants.length > 0 && (
-          <div>
-            <h3>Search Results:</h3>
-            <ul>
-              {restaurants.map((restaurant) => (
-                <li key={restaurant._id}>
-                  <strong>{restaurant.name}</strong>
-                  <br />
-                  Address: {restaurant.address}
-                  <br />
-                  Category: {restaurant.category}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {restaurants.length === 0 && searchQuery && <p>No restaurants found.</p>}
-      </div>
-
       <div className='card'>
-        <Table data={restaurants} />
+        <div className='search'>
+          <input
+            type='text'
+            placeholder='Buscar restaurante'
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button onClick={handleSearch}>Buscar</button>
+        </div>
+
+        <Table data={restaurants} searchQuery={searchQuery} onDelete={handleDelete} />
       </div>
     </main>
   );

@@ -144,3 +144,61 @@ nav a:hover {
   border-color: #0073ea;
   margin-top: 40px;
 }
+
+.editButton {
+  background-color: #0073ea;
+  fill: white;
+  color: white;
+  border-color: transparent;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.deleteButton {
+  background-color: red;
+  fill: white;
+  color: white;
+  border-color: transparent;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.search {
+  height: 40px;
+  display: flex;
+}
+
+.search input {
+  height: 34px;
+  border-radius: 4px 0px 0px 4px;
+  display: flex;
+  padding: 0px 10px;
+  background-color: #f3f3f3;
+  border-color: transparent;
+  width: 50%;
+}
+.search button {
+  height: 34px;
+  border-radius: 0px 4px 4px 0px;
+  display: flex;
+  padding: 0px 10px;
+  background-color: #f3f3f3;
+  border-color: transparent;
+  outline: none;
+  box-shadow: none;
+  align-items: center;
+}
+
+.empty-search {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90px;
+}

@@ -2,7 +2,6 @@ const express = require('express');
 const Restaurant = require('../models/Restaurant');
 const router = express.Router();
 
-// Ruta para obtener todos los restaurantes
 router.get('/restaurants', async (req, res) => {
   try {
     const restaurants = await Restaurant.find();
@@ -59,6 +58,31 @@ router.delete('/restaurants/:id', async (req, res) => {
     res.status(200).json({ message: 'Restaurant deleted successfully' });
   } catch (err) {
     res.status(500).json({ message: 'Error deleting restaurant', error: err.message });
+  }
+});
+
+router.put('/restaurants/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, address, category, phone } = req.body;
+
+  if (!name || !address || !category) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  try {
+    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
+      id,
+      { name, address, category, phone },
+      { new: true }
+    );
+
+    if (!updatedRestaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+
+    res.status(200).json(updatedRestaurant);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating restaurant', error: err.message });
   }
 });
 

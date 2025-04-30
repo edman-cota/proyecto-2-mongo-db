@@ -9,6 +9,10 @@ const Navigation = () => {
         <FaStore />
         Restaurantes
       </Link>
+      <Link to='/menu-items' style={{ color: 'white' }}>
+        <FaStore />
+        Menú
+      </Link>
     </nav>
   );
 };

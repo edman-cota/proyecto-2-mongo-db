@@ -1,4 +1,27 @@
+COMO CORRER EL PROYECTO:
+
+1. Primero necesitamos levantar nuestra servidor de node, usando los siguentes comandos:
+
+```bash
+cd backend
+node server.js
+```
+
+2. Luego necesitamos levantar nuestro proyecto de frontend, usando los sugientes comandos:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Después desde cualquier navegador ir a la siguente dirección:
+http://localhost:5173
+
 INDICES
 
 1. Índices Simples (Single Field Indexes)
+
    - Agregamos indices simples en el campo "name" de la colección "Restaurant" para optimizar las búsquedas por nombre.
+
+2. Índices Compuestos
+   - Agregamos índices compuestos en los campos "status" y "total" para optimizar consultas que busquen órdenes por su estado y total en la colección de "Order".

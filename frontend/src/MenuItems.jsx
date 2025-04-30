@@ -3,11 +3,8 @@ import axios from 'axios';
 import RestaurantModal from './RestaurantModal';
 import RestaurantList from './RestaurantList';
 import Table from './Table';
-import { useNavigate } from 'react-router';
 
-const Restaurants = () => {
-  const navigate = useNavigate();
-
+const MenuItems = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -44,11 +41,6 @@ const Restaurants = () => {
     }
   };
 
-  const onSelect = (id) => {
-    console.log('id: ', id);
-    navigate(`/restaurant/${id}`);
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -56,7 +48,7 @@ const Restaurants = () => {
   return (
     <main>
       <div className='navbar'>
-        <h2>Restaurantes</h2>
+        <h2>Menú</h2>
       </div>
 
       <div className='card'>
@@ -64,7 +56,7 @@ const Restaurants = () => {
           <div className='search'>
             <input
               type='text'
-              placeholder='Buscar restaurante'
+              placeholder='Buscar menú'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -73,10 +65,10 @@ const Restaurants = () => {
 
           <RestaurantModal fetchData={fetchData} />
         </div>
-        <Table data={restaurants} searchQuery={searchQuery} onDelete={handleDelete} onSelect={onSelect} />
+        <Table data={restaurants} searchQuery={searchQuery} onDelete={handleDelete} />
       </div>
     </main>
   );
 };
 
-export default Restaurants;
+export default MenuItems;

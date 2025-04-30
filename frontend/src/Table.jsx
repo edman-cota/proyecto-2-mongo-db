@@ -2,7 +2,7 @@ import React from 'react';
 import { MdDelete } from 'react-icons/md';
 import { MdEdit } from 'react-icons/md';
 
-const Table = ({ data, searchQuery, onDelete, onEdit }) => {
+const Table = ({ data, searchQuery, onDelete, onEdit, onSelect }) => {
   console.log('data: ', data);
   console.log('searchQuery: ', searchQuery);
 
@@ -22,7 +22,7 @@ const Table = ({ data, searchQuery, onDelete, onEdit }) => {
 
         <tbody>
           {data.map((item, index) => (
-            <tr key={index}>
+            <tr key={index} onClick={() => onSelect(item._id)}>
               {item.name && <td>{item.name}</td>}
               {item.category && <td>{item.category}</td>}
               {item.address && <td>{item.address}</td>}

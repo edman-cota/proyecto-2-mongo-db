@@ -45,7 +45,9 @@ const RestaurantModal = ({ fetchData }) => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <Dialog.Trigger asChild>
-        <button className='DialogTrigger'>+</button>
+        <button title='Crear nuevo restaurante' className='DialogTrigger'>
+          +
+        </button>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className='DialogOverlay' />

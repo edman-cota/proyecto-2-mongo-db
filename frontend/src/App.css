@@ -13,23 +13,28 @@ main {
   height: 50px;
   width: 100%;
   background-color: white;
+  align-items: center;
+  display: flex;
+  padding: 0px 16px;
+}
+.navbar h2 {
+  margin: 0px;
 }
 
 .header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 0px 20px;
-  height: 90px;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .card {
   background-color: white;
   border-radius: 4px;
   padding: 20px;
-  margin: 0px 20px;
+  margin: 40px 20px;
   overflow-y: auto;
-  height: calc(100vh - 160px);
+  height: calc(100vh - 110px);
 }
 
 table {
@@ -172,6 +177,8 @@ nav a:hover {
 .search {
   height: 40px;
   display: flex;
+  align-items: center;
+  width: 50%;
 }
 
 .search input {
@@ -181,7 +188,7 @@ nav a:hover {
   padding: 0px 10px;
   background-color: #f3f3f3;
   border-color: transparent;
-  width: 50%;
+  width: 100%;
 }
 .search button {
   height: 34px;
@@ -193,6 +200,7 @@ nav a:hover {
   outline: none;
   box-shadow: none;
   align-items: center;
+  cursor: pointer;
 }
 
 .empty-search {

@@ -45,44 +45,39 @@ router.post('/restaurants', async (req, res) => {
   }
 });
 
-router.delete('/restaurants/:id', async (req, res) => {
-  const { id } = req.params;
+router.delete('/restaurants', async (req, res) => {
+  const { ids } = req.body;
 
   try {
-    const deletedRestaurant = await Restaurant.findByIdAndDelete(id);
+    const result = await Restaurant.deleteMany({ _id: { $in: ids } });
 
-    if (!deletedRestaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'No Restaurants found to delete' });
     }
 
-    res.status(200).json({ message: 'Restaurant deleted successfully' });
+    res.status(200).json({ message: `${result.deletedCount} Restaurants(s) deleted successfully` });
   } catch (err) {
     res.status(500).json({ message: 'Error deleting restaurant', error: err.message });
   }
 });
 
-router.put('/restaurants/:id', async (req, res) => {
-  const { id } = req.params;
-  const { name, address, category, phone } = req.body;
-
-  if (!name || !address || !category) {
-    return res.status(400).json({ message: 'Missing required fields' });
-  }
+router.put('/restaurants', async (req, res) => {
+  const { ids, name, address, category, phone } = req.body;
 
   try {
-    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
-      id,
-      { name, address, category, phone },
-      { new: true }
-    );
+    const updatePromises = ids.map((id) => {
+      return Restaurant.findByIdAndUpdate(id, { name, address, category, phone }, { new: true });
+    });
 
-    if (!updatedRestaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
+    const updatedRestaurants = await Promise.all(updatePromises);
+
+    if (updatedRestaurants.length === 0) {
+      return res.status(404).json({ message: 'No Restaurants found to update' });
     }
 
-    res.status(200).json(updatedRestaurant);
+    res.status(200).json(updatedRestaurants);
   } catch (err) {
-    res.status(500).json({ message: 'Error updating restaurant', error: err.message });
+    res.status(500).json({ message: 'Error updating restaurants', error: err.message });
   }
 });
 

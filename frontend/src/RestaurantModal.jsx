@@ -1,49 +1,69 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import axios from 'axios';
 
-const RestaurantModal = ({ fetchData }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const RestaurantModal = ({ selectedIds, fetchData, initialItem, isOpen, setIsMenuPopoverOpen }) => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [category, setCategory] = useState('');
   const [phone, setPhone] = useState('');
 
-  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Evitar recarga de la página
+    e.preventDefault();
 
-    // Datos del restaurante a enviar
-    const newRestaurant = {
-      name,
-      address,
-      category,
-      phone,
-    };
+    if (initialItem || selectedIds.length > 0) {
+      const ids = selectedIds.length === 0 ? [initialItem._id] : selectedIds;
 
-    try {
-      // Hacer una solicitud POST al backend para agregar el restaurante
-      const response = await axios.post('http://localhost:5000/api/restaurants', newRestaurant);
+      const updatedRestaurant = {
+        ids: ids,
+        name,
+        address,
+        category,
+        phone,
+      };
 
-      // Si la solicitud es exitosa, mostrar mensaje o hacer algo con la respuesta
-      console.log('Restaurant added:', response.data);
-      // Limpiar el formulario después de la inserción exitosa
-      setName('');
-      setAddress('');
-      setCategory('');
-      setPhone('');
+      try {
+        await axios.put('http://localhost:5000/api/restaurants', updatedRestaurant);
+      } catch (err) {
+        console.error('Error fetching menu item:', err);
+      }
+    } else {
+      const newRestaurant = {
+        name,
+        address,
+        category,
+        phone,
+      };
 
-      setIsOpen(false);
-
-      fetchData();
-    } catch (error) {
-      console.error('Error adding restaurant:', error);
+      try {
+        await axios.post('http://localhost:5000/api/restaurants', newRestaurant);
+      } catch (error) {
+        console.error('Error adding restaurant:', error);
+      }
     }
+
+    setName('');
+    setAddress('');
+    setCategory('');
+    setPhone('');
+
+    setIsMenuPopoverOpen(false);
+
+    fetchData();
   };
 
+  useEffect(() => {
+    if (initialItem) {
+      console.log('initialItem: ', initialItem);
+      setName(initialItem.name);
+      setAddress(initialItem.address);
+      setCategory(initialItem.category);
+      setPhone(initialItem.phone);
+    }
+  }, [initialItem]);
+
   return (
-    <Dialog.Root open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+    <Dialog.Root open={isOpen} onOpenChange={(open) => setIsMenuPopoverOpen(open)}>
       <Dialog.Trigger asChild>
         <button title='Crear nuevo restaurante' className='DialogTrigger'>
           +
@@ -52,7 +72,9 @@ const RestaurantModal = ({ fetchData }) => {
       <Dialog.Portal>
         <Dialog.Overlay className='DialogOverlay' />
         <Dialog.Content className='DialogContent'>
-          <Dialog.Title className='DialogTitle'>Crear nuevo restaurante</Dialog.Title>
+          <Dialog.Title className='DialogTitle'>
+            {initialItem ? 'Actualizar restaurante' : 'Crear nuevo restaurante'}
+          </Dialog.Title>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 40 }}>
             <form onSubmit={handleSubmit}>
@@ -72,7 +94,7 @@ const RestaurantModal = ({ fetchData }) => {
                 <label>Teléfono:</label>
                 <input type='text' value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
-              <button type='submit'>Add Restaurant</button>
+              <button type='submit'>{initialItem ? 'Actualizar restaurante' : 'Agregar restaurante'}</button>
             </form>
           </div>
         </Dialog.Content>

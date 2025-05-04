@@ -19,9 +19,13 @@ http://localhost:5173
 
 INDICES
 
-1. Índices Simples (Single Field Indexes)
+1. Índices Simples
 
    - Agregamos indices simples en el campo "name" de la colección "Restaurant" para optimizar las búsquedas por nombre.
 
 2. Índices Compuestos
+
    - Agregamos índices compuestos en los campos "status" y "total" para optimizar consultas que busquen órdenes por su estado y total en la colección de "Order".
+
+3. Índice de Texto
+   - Agregamos índices de texto a los campos "name" y "description" para permitir a los usuarios buscar menús por palabra clave dentro del nombre y descripción del menú.

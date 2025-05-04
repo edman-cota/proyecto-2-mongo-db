@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import axios from 'axios';
 
-const MenuItemModal = ({ id }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const MenuItemModal = ({ id, selectedIds, fetchData, initialItem, isOpen, setIsMenuPopoverOpen }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -11,39 +10,61 @@ const MenuItemModal = ({ id }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validar que los campos sean correctos
     if (!name || !price) {
       alert('Please fill in all fields');
       return;
     }
 
-    const newMenuItem = {
-      name,
-      description,
-      price: parseFloat(price),
-      restaurantId: id,
-    };
+    if (initialItem || selectedIds.length > 0) {
+      const ids = selectedIds.length === 0 ? [initialItem._id] : selectedIds;
 
-    try {
-      // Enviar la solicitud POST al backend para crear el MenuItem
-      const response = await axios.post('http://localhost:5000/api/menu-items', newMenuItem);
+      const menuItem = {
+        ids: ids,
+        name,
+        description,
+        price: parseFloat(price),
+        restaurantId: id,
+      };
 
-      // Llamar a la función onAdd para actualizar el estado en el componente principal
-      //   onAdd(response.data);
-      alert('Menu item added successfully');
+      try {
+        await axios.put('http://localhost:5000/api/menu-items', menuItem);
+      } catch (err) {
+        console.error('Error fetching menu item:', err);
+      }
+    } else {
+      const menuItem = {
+        name,
+        description,
+        price: parseFloat(price),
+        restaurantId: id,
+      };
 
-      // Limpiar el formulario
-      setName('');
-      setDescription('');
-      setPrice('');
-    } catch (error) {
-      console.error('Error adding menu item:', error);
-      alert('Failed to add menu item');
+      try {
+        await axios.post('http://localhost:5000/api/menu-items', menuItem);
+      } catch (error) {
+        console.error('Error adding menu item:', error);
+        alert('Failed to add menu item');
+      }
     }
+
+    fetchData();
+
+    setName('');
+    setDescription('');
+    setPrice('');
+    setIsMenuPopoverOpen(false);
   };
 
+  useEffect(() => {
+    if (initialItem) {
+      setName(initialItem.name);
+      setDescription(initialItem.description);
+      setPrice(initialItem.price);
+    }
+  }, [initialItem]);
+
   return (
-    <Dialog.Root open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+    <Dialog.Root open={isOpen} onOpenChange={(open) => setIsMenuPopoverOpen(open)}>
       <Dialog.Trigger asChild>
         <button title='Crear nuevo restaurante' className='DialogTrigger'>
           +
@@ -52,20 +73,20 @@ const MenuItemModal = ({ id }) => {
       <Dialog.Portal>
         <Dialog.Overlay className='DialogOverlay' />
         <Dialog.Content className='DialogContent'>
-          <Dialog.Title className='DialogTitle'>Crear nuevo restaurante</Dialog.Title>
+          <Dialog.Title className='DialogTitle'>Crear nuevo menú</Dialog.Title>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 40 }}>
             <form onSubmit={handleSubmit}>
               <div>
-                <label>Name:</label>
+                <label>Nombre:</label>
                 <input type='text' value={name} onChange={(e) => setName(e.target.value)} required />
               </div>
               <div>
-                <label>Description:</label>
+                <label>Descripción:</label>
                 <input type='text' value={description} onChange={(e) => setDescription(e.target.value)} />
               </div>
               <div>
-                <label>Price:</label>
+                <label>Precio Q:</label>
                 <input
                   type='number'
                   value={price}
@@ -74,7 +95,7 @@ const MenuItemModal = ({ id }) => {
                   min='0'
                 />
               </div>
-              <button type='submit'>Add Menu Item</button>
+              <button type='submit'>{initialItem ? 'Agregar menú' : 'Actualizar menú'} </button>
             </form>
           </div>
         </Dialog.Content>

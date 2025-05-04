@@ -4,6 +4,8 @@ import RestaurantModal from './RestaurantModal';
 import RestaurantList from './RestaurantList';
 import Table from './Table';
 
+const headers = ['Nombre', 'Categoría', 'Dirección', 'Reseñas'];
+
 const MenuItems = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -65,7 +67,7 @@ const MenuItems = () => {
 
           <RestaurantModal fetchData={fetchData} />
         </div>
-        <Table data={restaurants} searchQuery={searchQuery} onDelete={handleDelete} />
+        <Table headers={headers} data={restaurants} searchQuery={searchQuery} onDelete={handleDelete} />
       </div>
     </main>
   );

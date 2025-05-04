@@ -10,5 +10,7 @@ const menuItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+menuItemSchema.index({ name: 'text', description: 'text' });
+
 const MenuItem = mongoose.model('MenuItem', menuItemSchema);
 module.exports = MenuItem;

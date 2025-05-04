@@ -148,6 +148,7 @@ nav a:hover {
   box-shadow: none;
   border-color: #0073ea;
   margin-top: 40px;
+  cursor: pointer;
 }
 
 .editButton {
@@ -209,4 +210,22 @@ nav a:hover {
   justify-content: center;
   align-items: center;
   height: 90px;
+}
+
+.metrics {
+  display: flex;
+  justify-content: center;
+  margin: 16px;
+  gap: 10px;
+}
+.metrics .metric {
+  background-color: white;
+  height: 120px;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  text-align: center;
 }

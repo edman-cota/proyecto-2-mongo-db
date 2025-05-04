@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { MdDelete, MdEdit } from 'react-icons/md';
+
 import RestaurantModal from './RestaurantModal';
 import RestaurantList from './RestaurantList';
 import Table from './Table';
-import { useNavigate } from 'react-router';
+
+const headers = ['Nombre', 'Categoría', 'Dirección', 'Reseñas'];
 
 const Restaurants = () => {
   const navigate = useNavigate();
@@ -11,7 +15,13 @@ const Restaurants = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [initialItem, setInitialItem] = useState(undefined);
+  const [isMenuPopoverOpen, setIsMenuPopoverOpen] = useState(false);
+
   const fetchData = () => {
+    setInitialItem(undefined);
+
     axios
       .get('http://localhost:5000/api/restaurants')
       .then((response) => {
@@ -33,7 +43,7 @@ const Restaurants = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/restaurants/${id}`);
+      await axios.delete('http://localhost:5000/api/restaurants');
 
       setRestaurants(restaurants.filter((restaurant) => restaurant._id !== id));
 
@@ -44,9 +54,40 @@ const Restaurants = () => {
     }
   };
 
+  const handleEdit = async (id) => {
+    const currentMenu = restaurants.find((menu) => menu._id === id);
+
+    setInitialItem(currentMenu);
+    setIsMenuPopoverOpen(true);
+  };
+
   const onSelect = (id) => {
-    console.log('id: ', id);
     navigate(`/restaurant/${id}`);
+  };
+
+  const handleDeleteMany = async () => {
+    try {
+      await axios.delete('http://localhost:5000/api/restaurants', {
+        data: { ids: selectedIds },
+      });
+
+      setSelectedIds([]);
+      fetchData();
+    } catch {
+      alert('Failed to delete the menu items');
+    }
+  };
+
+  const handleEditMany = () => {
+    setIsMenuPopoverOpen(true);
+  };
+
+  const handleCheckboxChange = (e, menuItemId) => {
+    if (e.target.checked) {
+      setSelectedIds([...selectedIds, menuItemId]);
+    } else {
+      setSelectedIds(selectedIds.filter((id) => id !== menuItemId));
+    }
   };
 
   useEffect(() => {
@@ -71,9 +112,38 @@ const Restaurants = () => {
             <button onClick={handleSearch}>Buscar</button>
           </div>
 
-          <RestaurantModal fetchData={fetchData} />
+          <div style={{ display: 'flex', gap: 10 }}>
+            {selectedIds.length > 0 && (
+              <>
+                <button title='Editar' className='editButton' onClick={() => handleEditMany()}>
+                  <MdEdit />
+                </button>
+
+                <button title='Eliminar' className='deleteButton' onClick={() => handleDeleteMany()}>
+                  <MdDelete />
+                </button>
+              </>
+            )}
+
+            <RestaurantModal
+              fetchData={fetchData}
+              selectedIds={selectedIds}
+              initialItem={initialItem}
+              isOpen={isMenuPopoverOpen}
+              setIsMenuPopoverOpen={setIsMenuPopoverOpen}
+            />
+          </div>
         </div>
-        <Table data={restaurants} searchQuery={searchQuery} onDelete={handleDelete} onSelect={onSelect} />
+        <Table
+          headers={headers}
+          data={restaurants}
+          searchQuery={searchQuery}
+          onDelete={handleDelete}
+          onSelect={onSelect}
+          onEdit={handleEdit}
+          handleCheckboxChange={handleCheckboxChange}
+          selectedIds={selectedIds}
+        />
       </div>
     </main>
   );

@@ -6,7 +6,7 @@ import { getUserData } from './util';
 const ReviewModal = ({ restaurantId, isOpen, setIsReviewPopopverOpen }) => {
   const { _id: userId } = getUserData();
 
-  const [rating, setRating] = useState(1);
+  const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -28,10 +28,12 @@ const ReviewModal = ({ restaurantId, isOpen, setIsReviewPopopverOpen }) => {
         comment,
       });
 
-      setIsReviewPopopverOpen(true);
+      setIsReviewPopopverOpen(false);
     } catch {
       console.log('Error creating review');
     }
+
+    setLoading(false);
   };
 
   return (
@@ -49,7 +51,7 @@ const ReviewModal = ({ restaurantId, isOpen, setIsReviewPopopverOpen }) => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 40 }}>
             <form onSubmit={handleSubmit}>
               <div>
-                <label>Rating:</label>
+                <label>Puntuación:</label>
                 <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
                   {[1, 2, 3, 4, 5].map((val) => (
                     <option key={val} value={val}>
@@ -58,12 +60,13 @@ const ReviewModal = ({ restaurantId, isOpen, setIsReviewPopopverOpen }) => {
                   ))}
                 </select>
               </div>
+              <br />
               <div>
-                <label>Comment:</label>
-                <textarea value={comment} onChange={(e) => setComment(e.target.value)} required />
+                <label>Comentario:</label>
+                <textarea value={comment} rows={4} onChange={(e) => setComment(e.target.value)} required />
               </div>
               <button type='submit' disabled={loading}>
-                {loading ? 'Submitting...' : 'Submit Review'}
+                {loading ? 'Agregando...' : 'Agregar reseña'}
               </button>
             </form>
           </div>

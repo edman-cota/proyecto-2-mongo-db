@@ -73,7 +73,9 @@ const MenuItemModal = ({ id, selectedIds, fetchData, initialItem, isOpen, setIsM
       <Dialog.Portal>
         <Dialog.Overlay className='DialogOverlay' />
         <Dialog.Content className='DialogContent'>
-          <Dialog.Title className='DialogTitle'>Crear nuevo menú</Dialog.Title>
+          <Dialog.Title className='DialogTitle'>
+            {initialItem ? 'Actualizar menú' : 'Crear nuevo menú'}{' '}
+          </Dialog.Title>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 40 }}>
             <form onSubmit={handleSubmit}>
@@ -95,7 +97,7 @@ const MenuItemModal = ({ id, selectedIds, fetchData, initialItem, isOpen, setIsM
                   min='0'
                 />
               </div>
-              <button type='submit'>{initialItem ? 'Agregar menú' : 'Actualizar menú'} </button>
+              <button type='submit'>{initialItem ? 'Actualizar menú' : 'Agregar menú'} </button>
             </form>
           </div>
         </Dialog.Content>

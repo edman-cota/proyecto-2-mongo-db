@@ -32,9 +32,12 @@ const Restaurant = () => {
 
   const fetchMenuItems = async () => {
     setInitialItem(undefined);
+    const restaurantId = params.id;
 
     try {
-      const response = await axios.get(`http://localhost:5000/api/menu-items?restaurantId=${params.id}`);
+      const response = await axios.get('http://localhost:5000/api/menu-items', {
+        params: { restaurantId },
+      });
       setMenus(response.data);
     } catch (error) {
       console.error('Error fetching menu items:', error);

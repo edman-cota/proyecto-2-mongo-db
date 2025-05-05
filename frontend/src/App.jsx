@@ -11,6 +11,7 @@ import SignUp from './SignUp';
 import Login from './Login';
 import { getUserData } from './util';
 import AdminDashboard from './AdminDashboard';
+import CustomerDashboard from './CustomerDashboard';
 
 const getAuthToken = () => {
   const token = localStorage.getItem('token');
@@ -48,7 +49,11 @@ function App() {
       <Routes>
         <Route path='signup' element={<SignUp />} />
         <Route path='login' element={<Login onLogin={onLogin} />} />
-        <Route path='' element={<AdminDashboard />} />
+        {currentUser && currentUser.role === 'admin' ? (
+          <Route path='' element={<AdminDashboard />} />
+        ) : (
+          <Route path='' element={<CustomerDashboard />} />
+        )}
         <Route path='restaurants' element={<Restaurants />} />¨
         <Route path='restaurant/:id' element={<Restaurant />} />
         <Route path='menu-items' element={<MenuItems />} />

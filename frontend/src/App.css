@@ -150,6 +150,19 @@ nav a:hover {
   outline: none;
   padding: 0px 6px;
 }
+.DialogContent form div select {
+  height: 36px;
+  width: 400px;
+  border-radius: 4px;
+  outline: none;
+  padding: 0px 6px;
+}
+.DialogContent form div textarea {
+  width: 400px !important;
+  border-radius: 4px;
+  outline: none;
+  padding: 10px;
+}
 .DialogContent form button {
   height: 36px;
   width: 400px;

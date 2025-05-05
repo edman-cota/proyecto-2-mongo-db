@@ -7,10 +7,13 @@ router.get('/menu-items', async (req, res) => {
   const { restaurantId } = req.query;
 
   try {
-    const menuItems = await MenuItem.find({ restaurant: restaurantId }).populate(
-      'restaurant',
-      'name address'
-    );
+    let menuItems;
+
+    if (restaurantId) {
+      menuItems = await MenuItem.find({ restaurant: restaurantId }).populate('restaurant', 'name address');
+    } else {
+      menuItems = await MenuItem.find().populate('restaurant', 'name address');
+    }
 
     res.status(200).json(menuItems);
   } catch (err) {

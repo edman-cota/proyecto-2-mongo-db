@@ -164,7 +164,11 @@ const Restaurant = () => {
       </div>
 
       {currentUser && currentUser.role === 'customer' && (
-        <ReviewModal isOpen={isReviewPopoverOpen} setIsReviewPopopverOpen={setIsReviewPopopverOpen} />
+        <ReviewModal
+          isOpen={isReviewPopoverOpen}
+          restaurantId={params.id}
+          setIsReviewPopopverOpen={setIsReviewPopopverOpen}
+        />
       )}
     </main>
   );

@@ -1,8 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
+import axios from 'axios';
+import { getUserData } from './util';
 
-const ReviewModal = ({ isOpen, setIsReviewPopopverOpen }) => {
-  const handleSubmit = () => {};
+const ReviewModal = ({ restaurantId, isOpen, setIsReviewPopopverOpen }) => {
+  const { _id: userId } = getUserData();
+
+  const [rating, setRating] = useState(1);
+  const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!rating || !comment) {
+      alert('Please fill all fields');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await axios.post('http://localhost:5000/api/reviews', {
+        userId,
+        restaurantId,
+        rating,
+        comment,
+      });
+
+      setIsReviewPopopverOpen(true);
+    } catch {
+      console.log('Error creating review');
+    }
+  };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => setIsReviewPopopverOpen(open)}>
@@ -17,25 +47,25 @@ const ReviewModal = ({ isOpen, setIsReviewPopopverOpen }) => {
           <Dialog.Title className='DialogTitle'>Tu opinión es muy importante para nosotros</Dialog.Title>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 40 }}>
-            {/* <form onSubmit={handleSubmit}>
-            <div>
-              <label>Nombre:</label>
-              <input type='text' value={name} onChange={(e) => setName(e.target.value)} required />
-            </div>
-            <div>
-              <label>Dirección:</label>
-              <input type='text' value={address} onChange={(e) => setAddress(e.target.value)} required />
-            </div>
-            <div>
-              <label>Categoría:</label>
-              <input type='text' value={category} onChange={(e) => setCategory(e.target.value)} required />
-            </div>
-            <div>
-              <label>Teléfono:</label>
-              <input type='text' value={phone} onChange={(e) => setPhone(e.target.value)} />
-            </div>
-            <button type='submit'>{initialItem ? 'Actualizar restaurante' : 'Agregar restaurante'}</button>
-          </form> */}
+            <form onSubmit={handleSubmit}>
+              <div>
+                <label>Rating:</label>
+                <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
+                  {[1, 2, 3, 4, 5].map((val) => (
+                    <option key={val} value={val}>
+                      {val}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label>Comment:</label>
+                <textarea value={comment} onChange={(e) => setComment(e.target.value)} required />
+              </div>
+              <button type='submit' disabled={loading}>
+                {loading ? 'Submitting...' : 'Submit Review'}
+              </button>
+            </form>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

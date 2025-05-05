@@ -28,8 +28,8 @@ const SignUp = () => {
         password,
         role,
       });
-      alert('User registered successfully');
-      // Puedes redirigir al login o a la página principal
+
+      navigate(`/`);
     } catch (err) {
       setError(err.response ? err.response.data.message : 'Error registering user');
     } finally {

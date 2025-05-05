@@ -87,6 +87,18 @@ nav a:hover {
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.ReviewDialogTrigger {
+  height: 34px;
+  background-color: #0073ea;
+  border-color: transparent;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
 .DialogTrigger {
   height: 34px;
   width: 34px;

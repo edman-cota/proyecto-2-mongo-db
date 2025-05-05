@@ -6,6 +6,8 @@ import Table from './Table';
 import MenuItemModal from './MenuItemModal';
 import axios from 'axios';
 import Metrics from './Metrics';
+import { getUserData } from './util';
+import ReviewModal from './ReviewModal';
 
 const menuItemsheaders = ['Menú', 'Descripción', 'Precio'];
 const metrics = [
@@ -17,6 +19,7 @@ const metrics = [
 
 const Restaurant = () => {
   const params = useParams();
+  const currentUser = getUserData();
 
   const [menus, setMenus] = useState([]);
   const [menusearch, setMenuSearch] = useState('');
@@ -25,6 +28,7 @@ const Restaurant = () => {
   const [initialItem, setInitialItem] = useState(undefined);
 
   const [isMenuPopoverOpen, setIsMenuPopoverOpen] = useState(false);
+  const [isReviewPopoverOpen, setIsReviewPopopverOpen] = useState(false);
 
   const fetchMenuItems = async () => {
     setInitialItem(undefined);
@@ -109,7 +113,7 @@ const Restaurant = () => {
         <h2>Restaurante</h2>
       </div>
 
-      <Metrics metrics={metrics} />
+      {currentUser && currentUser.role === 'admin' && <Metrics metrics={metrics} />}
 
       <div className='card'>
         <div className='header'>
@@ -158,6 +162,10 @@ const Restaurant = () => {
           selectedIds={selectedIds}
         />
       </div>
+
+      {currentUser && currentUser.role === 'customer' && (
+        <ReviewModal isOpen={isReviewPopoverOpen} setIsReviewPopopverOpen={setIsReviewPopopverOpen} />
+      )}
     </main>
   );
 };

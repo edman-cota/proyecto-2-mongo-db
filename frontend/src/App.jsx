@@ -10,6 +10,7 @@ import { Routes, Route } from 'react-router';
 import SignUp from './SignUp';
 import Login from './Login';
 import { getUserData } from './util';
+import AdminDashboard from './AdminDashboard';
 
 const getAuthToken = () => {
   const token = localStorage.getItem('token');
@@ -23,7 +24,6 @@ function App() {
   const onLogin = async () => {
     const token = getAuthToken();
     if (!token) {
-      console.log('User is not authenticated');
       return;
     }
 
@@ -33,8 +33,6 @@ function App() {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log('here: ', response.data);
 
       localStorage.setItem('user', JSON.stringify(response.data));
 
@@ -50,6 +48,7 @@ function App() {
       <Routes>
         <Route path='signup' element={<SignUp />} />
         <Route path='login' element={<Login onLogin={onLogin} />} />
+        <Route path='' element={<AdminDashboard />} />
         <Route path='restaurants' element={<Restaurants />} />¨
         <Route path='restaurant/:id' element={<Restaurant />} />
         <Route path='menu-items' element={<MenuItems />} />

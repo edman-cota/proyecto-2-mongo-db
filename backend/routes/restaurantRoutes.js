@@ -4,7 +4,34 @@ const router = express.Router();
 
 router.get('/restaurants', async (req, res) => {
   try {
-    const restaurants = await Restaurant.find();
+    const restaurants = await Restaurant.aggregate([
+      {
+        $lookup: {
+          from: 'reviews',
+          localField: '_id',
+          foreignField: 'restaurant',
+          as: 'reviewsData',
+        },
+      },
+      {
+        $addFields: {
+          averageRating: {
+            $avg: '$reviewsData.rating',
+          },
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          address: 1,
+          category: 1,
+          phone: 1,
+          menuItems: 1,
+          averageRating: 1,
+        },
+      },
+    ]);
+
     res.json(restaurants);
   } catch (err) {
     res.status(500).json({ message: 'Error al obtener restaurantes', error: err });
@@ -22,7 +49,6 @@ router.get('/restaurants/search', async (req, res) => {
   }
 });
 
-// Ruta para crear un restaurante
 router.post('/restaurants', async (req, res) => {
   const { name, address, category, phone } = req.body;
 

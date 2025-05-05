@@ -45,7 +45,9 @@ const Table = ({
               {item.price && <td>{item.price}</td>}
               {item.category && <td>{item.category}</td>}
               {item.address && <td>{item.address}</td>}
-              {item.reviews && <td>N/A</td>}
+              {(item.averageRating || item.averageRating === null) && (
+                <td>{item.averageRating === null ? 'N/A' : item.averageRating}</td>
+              )}
               <td>
                 {selectedIds.length === 0 && (
                   <button

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Product from './Product';
 
 const CustomerDashboard = () => {
   const [menus, setMenus] = useState([]);
+  const [orderItems, setOrderItems] = useState([]);
 
   const fetchMenuItems = async () => {
     try {
@@ -13,13 +15,63 @@ const CustomerDashboard = () => {
     }
   };
 
-  console.log('menus: ', menus);
+  const increaseItem = (product) => {
+    let currentItems = [...orderItems];
+    let currentProduct = orderItems.find((item) => item._id === product._id);
+
+    if (currentProduct) {
+      currentProduct = { ...currentProduct, quantity: currentProduct.quantity + 1 };
+
+      currentItems = currentItems.map((item) => (item._id === currentProduct._id ? currentProduct : item));
+
+      setOrderItems(currentItems);
+    } else {
+      currentItems.push({ ...product, quantity: 1 });
+
+      setOrderItems(currentItems);
+    }
+  };
+
+  const decreaseItem = (product) => {
+    let currentItems = [...orderItems];
+    let currentProduct = orderItems.find((item) => item._id === product._id);
+
+    if (currentProduct) {
+      currentProduct = { ...currentProduct, quantity: currentProduct.quantity - 1 };
+
+      currentItems = currentItems.map((item) => (item._id === currentProduct._id ? currentProduct : item));
+
+      setOrderItems(currentItems);
+    }
+  };
 
   useEffect(() => {
     fetchMenuItems();
   }, []);
 
-  return <div>CustomerDashboard</div>;
+  return (
+    <div
+      style={{
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'column',
+        gap: 20,
+        padding: 20,
+      }}
+    >
+      <div></div>
+
+      {menus.map((menu, index) => (
+        <Product
+          key={index}
+          product={menu}
+          orderItems={orderItems}
+          increaseItem={increaseItem}
+          decreaseItem={decreaseItem}
+        />
+      ))}
+    </div>
+  );
 };
 
 export default CustomerDashboard;

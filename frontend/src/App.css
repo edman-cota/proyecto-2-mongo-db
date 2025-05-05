@@ -307,3 +307,34 @@ nav a:hover {
   margin-top: 40px;
   cursor: pointer;
 }
+
+.Product {
+  background-color: white;
+  height: 120px;
+  border-radius: 4px;
+  display: flex;
+}
+.Product .ProductBody {
+  display: flex;
+  padding: 0px 16px;
+  justify-content: space-between;
+  width: 100%;
+}
+.Product .ProductQuantity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.Product .ProductQuantity button {
+  display: flex;
+  height: 30px;
+  width: 30px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: transparent;
+}
+.Product .ProductBody .RestaurantName {
+  color: gray;
+}

@@ -60,6 +60,7 @@ table tbody tr td {
 nav {
   display: flex;
   width: 240px;
+  min-width: 240px;
   height: 100%;
   flex-direction: column;
   gap: 10px;
@@ -175,6 +176,19 @@ nav a:hover {
   cursor: pointer;
 }
 
+.logoutButton {
+  background-color: #0073ea;
+  fill: white;
+  color: white;
+  border-color: transparent;
+  border-radius: 4px;
+  display: flex;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
 .search {
   height: 40px;
   display: flex;
@@ -228,4 +242,43 @@ nav a:hover {
   justify-content: center;
   border-radius: 4px;
   text-align: center;
+}
+
+.authForm {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin: auto;
+}
+.authForm div {
+  display: flex;
+  width: 400px;
+  flex-direction: column;
+}
+.authForm div label {
+  border-radius: 4px;
+  outline: none;
+  padding: 0px 6px;
+}
+.authForm div input {
+  height: 36px;
+  min-height: 36px;
+  border-radius: 4px;
+  outline: none;
+  padding: 0px 6px;
+}
+.authForm button {
+  height: 36px;
+  width: 400px;
+  border-radius: 4px;
+  outline: none;
+  padding: 0px 6px;
+  background-color: #0073ea;
+  color: white;
+  box-shadow: none;
+  border-color: #0073ea;
+  margin-top: 40px;
+  cursor: pointer;
 }

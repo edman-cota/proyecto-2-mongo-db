@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,10 +25,8 @@ const Login = () => {
         password,
       });
 
-      // Guardar el token en el localStorage o en un estado global
       localStorage.setItem('token', response.data.token);
-      onLogin(response.data.token); // Llamar a la función onLogin (pasa el token a un estado global)
-      alert('Login successful');
+      onLogin(response.data.token);
     } catch (err) {
       setError(err.response ? err.response.data.message : 'Error logging in');
     } finally {
@@ -34,10 +35,10 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       <h2>Login</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
+      <form className='authForm' onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>
           <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -50,6 +51,8 @@ const Login = () => {
           {loading ? 'Logging In...' : 'Login'}
         </button>
       </form>
+
+      <button onClick={() => navigate(`/signup`)}>Crear cuenta aqui</button>
     </div>
   );
 };

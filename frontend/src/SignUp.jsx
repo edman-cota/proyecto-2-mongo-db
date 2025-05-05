@@ -11,6 +11,8 @@ const SignUp = () => {
   const [role, setRole] = useState('customer');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [address, setAddress] = useState('');
+  const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,9 +29,11 @@ const SignUp = () => {
         email,
         password,
         role,
+        address,
+        coordinates,
       });
 
-      navigate(`/`);
+      navigate(`/login`);
     } catch (err) {
       setError(err.response ? err.response.data.message : 'Error registering user');
     } finally {
@@ -60,6 +64,33 @@ const SignUp = () => {
             <option value='customer'>Cliente</option>
             <option value='admin'>Admin</option>
           </select>
+        </div>
+        <div>
+          <label>Dirección:</label>
+          <input
+            type='text'
+            placeholder='Address'
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Latitud:</label>
+          <input
+            type='number'
+            placeholder='Latitude'
+            value={coordinates.latitude}
+            onChange={(e) => setCoordinates({ ...coordinates, latitude: e.target.value })}
+          />
+        </div>
+        <div>
+          <label>Longitud:</label>
+          <input
+            type='number'
+            placeholder='Longitude'
+            value={coordinates.longitude}
+            onChange={(e) => setCoordinates({ ...coordinates, longitude: e.target.value })}
+          />
         </div>
         <button type='submit' disabled={loading}>
           {loading ? 'Signing Up...' : 'Crear usuario'}

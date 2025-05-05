@@ -7,9 +7,16 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['customer', 'admin'], default: 'customer' },
+    address: { type: String, required: true },
+    location: {
+      type: { type: String, enum: ['Point'], required: true },
+      coordinates: { type: [Number], required: true },
+    },
   },
   { timestamps: true }
 );
+
+userSchema.index({ location: '2dsphere' });
 
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {

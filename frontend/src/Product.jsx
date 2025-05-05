@@ -1,22 +1,7 @@
-import React, { useState } from 'react';
-
 import Image from '../src/assets/images.jpg';
+import { getTotalQuality } from './util';
 
 const Product = ({ product, orderItems, increaseItem, decreaseItem }) => {
-  const [quantity, setQuantity] = useState(0);
-
-  const getTotalQuality = () => {
-    console.log('orderItems: ', orderItems);
-
-    const currentProduct = orderItems.find((item) => item._id === product._id);
-    console.log('currentProduct: ', currentProduct);
-    if (currentProduct) {
-      return currentProduct.quantity;
-    } else {
-      return 0;
-    }
-  };
-
   return (
     <div className='Product'>
       <div>
@@ -36,10 +21,13 @@ const Product = ({ product, orderItems, increaseItem, decreaseItem }) => {
             <p className='RestaurantName'>{product.restaurant.name}</p>
           </div>
           <div className='ProductQuantity'>
-            <button disabled={getTotalQuality() <= 0} onClick={() => decreaseItem(product)}>
+            <button
+              disabled={getTotalQuality(product, orderItems) <= 0}
+              onClick={() => decreaseItem(product)}
+            >
               -
             </button>
-            <p>{getTotalQuality()}</p>
+            <p>{getTotalQuality(product, orderItems)}</p>
             <button onClick={() => increaseItem(product)}>+</button>
           </div>
         </div>

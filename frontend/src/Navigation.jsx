@@ -35,9 +35,9 @@ const Navigation = () => {
         <FaStore />
         Restaurantes
       </Link>
-      <Link to='/menu-items' style={{ color: 'white' }}>
+      <Link to='/orders' style={{ color: 'white' }}>
         <FaStore />
-        Menú
+        Ordenes
       </Link>
     </nav>
   );

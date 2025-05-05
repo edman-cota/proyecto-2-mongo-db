@@ -12,6 +12,7 @@ import Login from './Login';
 import { getUserData } from './util';
 import AdminDashboard from './AdminDashboard';
 import CustomerDashboard from './CustomerDashboard';
+import Orders from './Orders';
 
 const getAuthToken = () => {
   const token = localStorage.getItem('token');
@@ -57,6 +58,7 @@ function App() {
         <Route path='restaurants' element={<Restaurants />} />¨
         <Route path='restaurant/:id' element={<Restaurant />} />
         <Route path='menu-items' element={<MenuItems />} />
+        <Route path='orders' element={<Orders />} />
       </Routes>
     </div>
   );

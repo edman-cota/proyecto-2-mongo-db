@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 import RestaurantModal from './RestaurantModal';
-import RestaurantList from './RestaurantList';
 import Table from './Table';
 
 const headers = ['Nombre', 'Categoría', 'Dirección', 'Reseñas'];

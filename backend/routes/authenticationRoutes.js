@@ -5,7 +5,7 @@ const User = require('../models/User');
 const router = express.Router();
 
 router.post('/signup', async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, address, coordinates } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -13,7 +13,18 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ message: 'Email is already in use' });
     }
 
-    const user = new User({ name, email, password, role });
+    const user = new User({
+      name,
+      email,
+      password,
+      role,
+      address,
+      location: {
+        type: 'Point',
+        coordinates: [coordinates.longitude, coordinates.latitude], // [longitud, latitud]
+      },
+    });
+
     await user.save();
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {

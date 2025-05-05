@@ -3,21 +3,26 @@ const Order = require('../models/Order');
 const MenuItem = require('../models/MenuItem');
 const router = express.Router();
 
-// Endpoint para crear una orden
+router.get('/orders', async (req, res) => {
+  try {
+    const orders = await Order.find().populate('user', 'name email').populate('items.itemId', 'name price');
+
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching orders', error: err.message });
+  }
+});
+
 router.post('/orders', async (req, res) => {
   const { userId, items } = req.body;
-
-  console.log('items: ', items);
 
   if (!userId || !items || items.length === 0) {
     return res.status(400).json({ message: 'Missing required fields or items' });
   }
 
   try {
-    // Obtener los detalles completos de los MenuItems seleccionados
     const menuItemsDetails = await MenuItem.find({ _id: { $in: items.map((item) => item.itemId) } });
 
-    // Crear el objeto items con los detalles completos de los MenuItems
     const orderItems = items.map((item) => {
       const menuItem = menuItemsDetails.find((m) => m._id.toString() === item.itemId);
       return {
@@ -29,10 +34,8 @@ router.post('/orders', async (req, res) => {
       };
     });
 
-    // Calcular el total de la orden
     const total = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-    // Crear la nueva orden
     const order = new Order({
       user: userId,
       items: orderItems,

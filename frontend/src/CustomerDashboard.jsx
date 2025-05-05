@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { IoCart } from 'react-icons/io5';
+
 import Product from './Product';
+import { getCartTotalProducts, getUserData } from './util';
 
 const CustomerDashboard = () => {
+  const currentUser = getUserData();
+
   const [menus, setMenus] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
 
@@ -45,6 +50,22 @@ const CustomerDashboard = () => {
     }
   };
 
+  const handlePlaceOrder = async () => {
+    const userId = currentUser._id;
+
+    const items = orderItems.map((item) => ({
+      itemId: item._id,
+      quantity: item.quantity,
+    }));
+
+    await axios.post('http://localhost:5000/api/orders', {
+      userId,
+      items,
+    });
+
+    setOrderItems([]);
+  };
+
   useEffect(() => {
     fetchMenuItems();
   }, []);
@@ -59,7 +80,18 @@ const CustomerDashboard = () => {
         padding: 20,
       }}
     >
-      <div></div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-end' }}>
+        {getCartTotalProducts(orderItems)}
+        <IoCart />
+
+        <button
+          disabled={getCartTotalProducts(orderItems) <= 0}
+          className='orderButton'
+          onClick={() => handlePlaceOrder()}
+        >
+          Ordenar
+        </button>
+      </div>
 
       {menus.map((menu, index) => (
         <Product

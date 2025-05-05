@@ -214,6 +214,24 @@ nav a:hover {
   cursor: pointer;
 }
 
+.orderButton {
+  background-color: #0073ea;
+  fill: white;
+  color: white;
+  border-color: transparent;
+  border-radius: 4px;
+  display: flex;
+  height: 30px;
+  width: 100px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.orderButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .search {
   height: 40px;
   display: flex;

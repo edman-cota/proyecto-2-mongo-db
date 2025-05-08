@@ -4,8 +4,18 @@ const MenuItem = require('../models/MenuItem');
 const router = express.Router();
 
 router.get('/orders', async (req, res) => {
+  const { userId } = req.query;
+
   try {
-    const orders = await Order.find().populate('user', 'name email').populate('items.itemId', 'name price');
+    let query = {};
+
+    if (userId) {
+      query.user = userId;
+    }
+
+    const orders = await Order.find(query)
+      .populate('user', 'name email address')
+      .populate('items.itemId', 'name price');
 
     res.status(200).json(orders);
   } catch (err) {

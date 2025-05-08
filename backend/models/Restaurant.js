@@ -8,6 +8,10 @@ const restaurantSchema = new mongoose.Schema(
     phone: { type: String },
     menuItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem' }],
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
+    location: {
+      type: { type: String, enum: ['Point'], required: true },
+      coordinates: { type: [Number], required: true },
+    },
   },
   { timestamps: true }
 );

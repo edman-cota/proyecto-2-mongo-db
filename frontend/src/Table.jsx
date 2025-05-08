@@ -64,6 +64,7 @@ const Table = ({
               )}
               {item.items && <td>{getTotalProducts(item.items)}</td>}
               {item.total && <td>{item.total}</td>}
+              {item?.user?.address && <td>{item.user.address}</td>}
 
               {isEditable && (
                 <>

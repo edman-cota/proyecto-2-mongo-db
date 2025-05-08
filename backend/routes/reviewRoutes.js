@@ -7,10 +7,6 @@ const router = express.Router();
 router.post('/reviews', async (req, res) => {
   const { userId, restaurantId, rating, comment } = req.body;
 
-  if (!userId || !restaurantId || !rating) {
-    return res.status(400).json({ message: 'Missing required fields' });
-  }
-
   try {
     const user = await User.findById(userId);
     const restaurant = await Restaurant.findById(restaurantId);
@@ -31,6 +27,10 @@ router.post('/reviews', async (req, res) => {
     });
 
     const savedReview = await review.save();
+
+    restaurant.reviews.push(savedReview._id);
+    await restaurant.save();
+
     res.status(201).json(savedReview);
   } catch (err) {
     res.status(500).json({ message: 'Error creating review', error: err.message });

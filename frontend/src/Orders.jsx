@@ -2,23 +2,42 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Table from './Table';
+import { getUserData } from './util';
 
-const headers = ['Estado', '# arículos', 'Total Q'];
+const headers = ['Estado', '# arículos', 'Total Q', 'Dirección de entrega'];
 
 const Orders = () => {
+  const currentUser = getUserData();
+
   const [orders, setOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIds, setSelectedIds] = useState([]);
 
   const fetchData = () => {
-    axios
-      .get('http://localhost:5000/api/orders')
-      .then((response) => {
-        setOrders(response.data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los restaurantes', error);
-      });
+    console.log('currentUser: ', currentUser);
+    const userId = currentUser._id;
+
+    if (currentUser.role === 'admin') {
+      axios
+        .get('http://localhost:5000/api/orders')
+        .then((response) => {
+          setOrders(response.data);
+        })
+        .catch((error) => {
+          console.error('Error al obtener los restaurantes', error);
+        });
+    } else {
+      axios
+        .get('http://localhost:5000/api/orders', {
+          params: { userId },
+        })
+        .then((response) => {
+          setOrders(response.data);
+        })
+        .catch((error) => {
+          console.error('Error al obtener los restaurantes', error);
+        });
+    }
   };
 
   const handleDelete = () => {};

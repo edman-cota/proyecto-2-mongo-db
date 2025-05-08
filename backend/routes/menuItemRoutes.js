@@ -10,9 +10,51 @@ router.get('/menu-items', async (req, res) => {
     let menuItems;
 
     if (restaurantId) {
-      menuItems = await MenuItem.find({ restaurant: restaurantId }).populate('restaurant', 'name address');
+      menuItems = await MenuItem.find({ restaurant: restaurantId })
+        .populate('restaurant', 'name address')
+        .populate('restaurant.reviews', 'rating');
+
+      const restaurant = await Restaurant.findById(restaurantId).populate('reviews').exec();
+
+      let averageRating = null;
+
+      if (restaurant.reviews.length > 0) {
+        averageRating =
+          restaurant.reviews.reduce((sum, review) => sum + review.rating, 0) / restaurant.reviews.length;
+      }
+
+      menuItems = menuItems.map((item) => ({
+        ...item.toObject(),
+        restaurant: {
+          ...item.restaurant.toObject(),
+          averageRating,
+        },
+      }));
     } else {
-      menuItems = await MenuItem.find().populate('restaurant', 'name address');
+      menuItems = await MenuItem.find()
+        .populate('restaurant', 'name address')
+        .populate('restaurant.reviews', 'rating');
+
+      menuItems = await Promise.all(
+        menuItems.map(async (item) => {
+          const restaurant = await Restaurant.findById(item.restaurant._id).populate('reviews').exec();
+
+          let averageRating = null;
+
+          if (restaurant.reviews.length > 0) {
+            averageRating =
+              restaurant.reviews.reduce((sum, review) => sum + review.rating, 0) / restaurant.reviews.length;
+          }
+
+          return {
+            ...item.toObject(),
+            restaurant: {
+              ...item.restaurant.toObject(),
+              averageRating,
+            },
+          };
+        })
+      );
     }
 
     res.status(200).json(menuItems);

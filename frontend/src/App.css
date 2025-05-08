@@ -32,9 +32,9 @@ main {
   background-color: white;
   border-radius: 4px;
   padding: 20px;
-  margin: 40px 20px;
+  margin: 40px 20px 0px 20px;
   overflow-y: auto;
-  height: calc(100vh - 110px);
+  height: calc(100vh - 150px);
 }
 
 table {
@@ -130,7 +130,7 @@ nav a:hover {
 }
 
 .DialogContent form {
-  width: 400px;
+  width: 500px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -149,6 +149,7 @@ nav a:hover {
   border-radius: 4px;
   outline: none;
   padding: 0px 6px;
+  width: 200px;
 }
 .DialogContent form div select {
   height: 36px;
@@ -355,4 +356,23 @@ nav a:hover {
 }
 .Product .ProductBody .RestaurantName {
   color: gray;
+}
+
+.Pagination {
+  height: 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0px 20px;
+  gap: 10px;
+}
+.Pagination button {
+  height: 28px;
+  width: 28px;
+  background-color: transparent;
+  display: flex;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
